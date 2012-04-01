@@ -312,10 +312,15 @@ private void save(File file) {
 	suffix = suffix.toLowerCase();
 	JFrame frame = new JFrame();
 	if (suffix.equals("jpg") || suffix.equals("png")) {
-		try {
-			ImageIO.write(_img, suffix, file);
-		} catch (IOException e){
-			e.printStackTrace();
+		
+		if (_img != null) {
+			try {
+				ImageIO.write(_img, suffix, file);
+			} catch (IOException e){
+				e.printStackTrace();
+			}
+		} else {
+			JOptionPane.showMessageDialog(frame, "Failed - _img is null");
 		}
 	} else {
 		JOptionPane.showMessageDialog(frame, "Failed - file extension has to be either .jpg or .png");
@@ -328,6 +333,7 @@ private void saveAs() {
 	FileDialog chooser = new FileDialog(frame, "Use a .jpg or .png extension", FileDialog.SAVE);
 	chooser.setVisible(true);
 	if (chooser.getFile() != null) {
+		//JOptionPane.showMessageDialog(frame, chooser.getDirectory().toString() + File.separator.toString() + chooser.getFile().toString());
 		save(chooser.getDirectory() + File.separator + chooser.getFile());
 	} else {
 		JOptionPane.showMessageDialog(frame, "Failed - can't get the file");
@@ -337,8 +343,12 @@ private void saveAs() {
 /* Sho Abe */
 private void getCity(ItemEvent ie) {
 	if (ie.getSource() == boxCities1) {
+		if (boxCities2.getSelectedIndex() > 0) boxCities2.setSelectedIndex(0); 
+		else if (cmbkorea.getSelectedIndex() > 0) cmbkorea.setSelectedIndex(0); 
 		switch (boxCities1.getSelectedIndex()) {
 		case 0:
+			lblSelectedCity2.setText("");
+			lblSelectedCountry2.setText("");
 			break;
 		case 1: //Sapporo, Hokkaido
 			ttfLat.setText("43.062096");
@@ -372,10 +382,17 @@ private void getCity(ItemEvent ie) {
 			
 			break;
 		}
-		tfSelectedCity.setText(boxCities1.getSelectedItem().toString());
+		if (boxCities1.getSelectedIndex() != 0) {
+			lblSelectedCity2.setText(boxCities1.getSelectedItem().toString());
+			lblSelectedCountry2.setText(lblJapan.getText());
+		}
 	} else if (ie.getSource() == boxCities2) {
+		if (boxCities1.getSelectedIndex() > 0) boxCities1.setSelectedIndex(0); 
+		else if (cmbkorea.getSelectedIndex() > 0) cmbkorea.setSelectedIndex(0); 
 		switch (boxCities2.getSelectedIndex()) {
 		case 0:
+			lblSelectedCity2.setText("");
+			lblSelectedCountry2.setText("");
 			break;
 		case 1: //Toronto
 			ttfLat.setText("43.653226");
@@ -397,8 +414,40 @@ private void getCity(ItemEvent ie) {
 			
 			break;
 		}
-		tfSelectedCity.setText(boxCities2.getSelectedItem().toString());
+		if (boxCities2.getSelectedIndex() != 0) {
+			lblSelectedCity2.setText(boxCities2.getSelectedItem().toString());
+			lblSelectedCountry2.setText(lblCanada.getText());
+		}
+		/* Yong */
+	} else if (ie.getSource() == cmbkorea){
+		if (boxCities1.getSelectedIndex() > 0) boxCities1.setSelectedIndex(0); 
+		else if (boxCities2.getSelectedIndex() > 0) boxCities2.setSelectedIndex(0);
+		String lat = "", lon = "";
+		int index = cmbkorea.getSelectedIndex();
+		
+		// 1 = "Busan", 2 = "Cheju do", 3 = "Daegu", 4 = "Seoul", 5 = "Ulsan"
+		if (index == 1){
+			lat = "35.155846"; lon = "129.078369";
+		} else if (index == 2){
+			lat = "33.486435"; lon = "126.518555";
+		} else if (index == 3){
+			lat = "35.8846"; lon = "128.594971";
+		} else if (index == 4){
+			lat = "37.579413"; lon = "126.968994";
+		} else if (index == 5){
+			lat = "35.550105"; lon = "129.331055";
+		}
+		ttfLat.setText(lat);
+		ttfLon.setText(lon);
+		if (cmbkorea.getSelectedIndex() > 0) {
+			lblSelectedCity2.setText(cmbkorea.getSelectedItem().toString());
+			lblSelectedCountry2.setText(lkorea.getText());
+		} else {
+			lblSelectedCity2.setText("");
+			lblSelectedCountry2.setText("");
+		}
 	}
+	
 }
 
 private void initComponents() {
@@ -430,6 +479,7 @@ private void initComponents() {
   ttfProgressMsg = new JTextField();
   progressBar = new JProgressBar();
   lblProgressStatus = new JLabel();
+  
   /* Sho Abe */
   btnZoomIn = new JButton();
   btnZoomOut = new JButton();
@@ -441,8 +491,14 @@ private void initComponents() {
   lblJapan = new JLabel();
   lblCanada = new JLabel();
   lblSelectedCity = new JLabel();
-  tfSelectedCity = new JTextField();
-
+  lblSelectedCity2 = new JLabel();
+  lblSelectedCountry = new JLabel();
+  lblSelectedCountry2 = new JLabel();
+  
+  /* Yong */
+  lkorea = new JLabel("Korea");
+  cmbkorea = new JComboBox(koreaCities);
+  
   //======== this ========
   setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
   setTitle("Google Static Maps");
@@ -604,26 +660,35 @@ private void initComponents() {
   		{
   			panel11.setOpaque(false);
   			panel11.setBorder(new CompoundBorder(
-  				new TitledBorder("Please select a city you'd like to see."),
+  				new TitledBorder("Select a city you'd like to see."),
   				Borders.DLU2_BORDER));
   			panel11.setLayout(new TableLayout(new double[][] {
-  	  				{0.17, 0.17, 0.17, 0.17, 0.05, TableLayout.FILL},
+  	  				//{0.17, 0.17, 0.17, 0.17, 0.05, TableLayout.FILL},
+  					{0.17, 0.17, 0.13, 0.17, 0.13, 0.17, TableLayout.FILL},
   	  				{TableLayout.PREFERRED, TableLayout.PREFERRED}}));
   	  			((TableLayout)panel11.getLayout()).setHGap(5);
   	  			((TableLayout)panel11.getLayout()).setVGap(5);
-
-  			lblSelectedCity.setText("Selected City");
+  	  			
+  	  		//selected city
+  			lblSelectedCity.setText("Selected City:");
   			lblSelectedCity.setHorizontalAlignment(SwingConstants.RIGHT);
   			panel11.add(lblSelectedCity, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-
-  			panel11.add(tfSelectedCity, new TableLayoutConstraints(1, 0, 1, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   			
+  			panel11.add(lblSelectedCity2, new TableLayoutConstraints(1, 0, 1, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			
+  			//selected country
+  			lblSelectedCountry.setText("Country:");
+  			lblSelectedCountry.setHorizontalAlignment(SwingConstants.RIGHT);
+  			panel11.add(lblSelectedCountry, new TableLayoutConstraints(0, 1, 0, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			
+  			panel11.add(lblSelectedCountry2, new TableLayoutConstraints(1, 1, 1, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+
   			lblJapan.setText("Japan");
   			lblJapan.setHorizontalAlignment(SwingConstants.RIGHT);
   			panel11.add(lblJapan, new TableLayoutConstraints(2, 0, 2, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- drop down list - Japan
-  			String[] cities = {"Pease select", "Sapporo", "Sendai", "Tokyo", "Osaka", "Kyoto", "Fukuoka", "Okinawa"};
+  			String[] cities = {"---", "Sapporo", "Sendai", "Tokyo", "Osaka", "Kyoto", "Fukuoka", "Okinawa"};
   			for (int i = 0; i < cities.length; i++)
   				boxCities1.addItem(cities[i]);
   			boxCities1.addItemListener(new ItemListener() {
@@ -638,7 +703,7 @@ private void initComponents() {
   			panel11.add(lblCanada, new TableLayoutConstraints(2, 1, 2, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   			
   			//---- drop down list - Canada
-  			String[] cities2 = {"Pease select", "Toronto", "Vancouver", "Montreal", "Quebec"};
+  			String[] cities2 = {"---", "Toronto", "Vancouver", "Montreal", "Quebec"};
   			for (int i = 0; i < cities2.length; i++)
   				boxCities2.addItem(cities2[i]);
   			boxCities2.addItemListener(new ItemListener() {
@@ -648,6 +713,16 @@ private void initComponents() {
   			});
   			panel11.add(boxCities2, new TableLayoutConstraints(3, 1, 3, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   			
+  			/* Yong */
+  			// ComboBox - Korea
+  			lkorea.setHorizontalAlignment(SwingConstants.RIGHT);
+  			panel11.add(lkorea, new TableLayoutConstraints(4, 0, 4, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			cmbkorea.addItemListener(new ItemListener(){
+  				public void itemStateChanged(ItemEvent e){
+  					getCity(e);
+  				}
+  			});
+  			panel11.add(cmbkorea, new TableLayoutConstraints(5, 0, 5, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   		}
   		contentPanel.add(panel11, new TableLayoutConstraints(0, 1, 0, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
@@ -739,6 +814,7 @@ private JCheckBox checkboxSendStatus;
 private JTextField ttfProgressMsg;
 private JProgressBar progressBar;
 private JLabel lblProgressStatus;
+
 /* Sho ABe */
 private JButton btnZoomIn;
 private JButton btnZoomOut;
@@ -750,14 +826,15 @@ private JComboBox boxCities2;
 private JLabel lblJapan;
 private JLabel lblCanada;
 private JLabel lblSelectedCity;
-private JTextField tfSelectedCity;
+private JLabel lblSelectedCity2;
+private JLabel lblSelectedCountry;
+private JLabel lblSelectedCountry2;
+
+/* Yong */
+private JLabel lkorea;
+private JComboBox cmbkorea;
+private String[] koreaCities = {"---", "Busan", "Cheju do", "Daegu", "Seoul", "Ulsan"};
+
 
 // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
-//Tokyo    - Latitude: 35.6891848, Longitude 139.6916481
-//Toronto  - Latitude: 43.652527, Longitude: -79.381961
-//New York - 
-//Best guess for London Coordinates is 43.0333¡ N, 81.1500¡ W
-//London, Canada - 42¡ 59' 0" N / 81¡ 15' 0" W
-
-//Sapporo, Japan - 43.062096, 141.354376
