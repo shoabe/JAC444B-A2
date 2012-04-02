@@ -558,7 +558,7 @@ private void initComponents() {
   			btnGetMap.addActionListener(new ActionListener() {
   				public void actionPerformed(ActionEvent e) {
   					startTaskAction();
-  					btnSaveMap.setVisible(true);
+  					btnSaveMap.setEnabled(true);
   				}
   			});
   			panel1.add(btnGetMap, new TableLayoutConstraints(5, 0, 5, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
@@ -630,7 +630,7 @@ private void initComponents() {
   			panel1.add(btnZoomOut, new TableLayoutConstraints(3, 2, 3, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- btnSaveMap ----
-  			btnSaveMap.setVisible(false);
+  			btnSaveMap.setEnabled(false);
   			btnSaveMap.setText("Save");
   			btnSaveMap.addActionListener(new ActionListener() {
   				public void actionPerformed(ActionEvent e) {
