@@ -1,7 +1,11 @@
 /*
  * Created by JFormDesigner on Mon Apr 21 12:50:34 EDT 2008
  */
-
+/*
+ * JAC444B Assingment 2
+ * Modified by Sho Abe and Yong S. Lee
+ * April 1, 2012
+ */
 package Provider.GoogleMapsStatic.TestUI;
 
 import Provider.GoogleMapsStatic.*;
@@ -287,6 +291,7 @@ private void quitProgram() {
 }
 
 /* Sho Abe */
+/* Decrements the zoom rate. (0 - 19) */
 private void zoomIn() {
 	int n = Integer.parseInt(ttfZoom.getText());
 	if (n >= 0 && n < 19) {
@@ -295,6 +300,7 @@ private void zoomIn() {
 }
 
 /* Sho Abe */
+/* Increments the zoom rate. (0 - 19) */
 private void zoomOut() {
 	int n = Integer.parseInt(ttfZoom.getText());
 	if (n > 0 && n <= 19) {
@@ -303,11 +309,14 @@ private void zoomOut() {
 }
 
 /* Sho Abe */
+/* Passes a file name to save(File file) */
 private void save(String name) {
 	save(new File(name));
 }
 
 /* Sho Abe */
+/* Tries to save a map image after users get the image by pretting the GetMap button
+ * It fails if the file extension isn't png or _img is null */
 private void save(File file) {
 	String suffix = file.getName().substring(file.getName().lastIndexOf('.') + 1);
 	suffix = suffix.toLowerCase();
@@ -328,6 +337,7 @@ private void save(File file) {
 }
 
 /* Sho Abe */
+/* Asks for a file name. (the file extension has to be png) */
 private void saveAs() {
 	JFrame frame = new JFrame();
 	FileDialog chooser = new FileDialog(frame, "Use a .png extension", FileDialog.SAVE);

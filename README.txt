@@ -1,0 +1,29 @@
+JAC444B Assignment 2 - Application 1 (Team 3)
+===============================================
+
+After creating the JAR files, I've imported the JAR files into Eclipse again.
+I've checked that there's no compilation error. I will lose 50% if that's not the case.
+
+Sho Abe (sabe@learn.senecac.on.ca)
+Yong S. Lee (yslee11@learn.senecac.on.ca)
+
+---
+
+How to run the application in Eclipse
+--------------------------------------
+1. Make a new Java project with any name (e.g. jac444b_a2_team3)
+   File --> New --> JavaProject
+
+2. Import the jar file (jac444b_a2_team3.jar) to the src folder
+   Right click on the src folder and choose Import, then find the location you saved the jar file (jac444b_a2_team3.jar)
+
+3. Add External Archives
+   RIght click on the project name (e.g. jac444b_a2_team3) and choose Build Path, then add External Archives from the "lib" folder
+   
+   If you don't have the archives
+   - Download the sample code from:
+   http://developerlife.com/tutorials/?p=274
+   - Unzip it
+   - Find the "lib" folder
+   
+4. Run SampleApp.java in Provider.GoogleMapsStatic.TestUI
