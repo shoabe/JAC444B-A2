@@ -203,8 +203,9 @@ private void _displayImgInFrame() {
 
   final JFrame frame = new JFrame("Google Static Map");
   GUIUtils.setAppIcon(frame, "71.png");
-  frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
+  frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+  
   JLabel imgLbl = new JLabel(new ImageIcon(_img));
   imgLbl.setToolTipText(MessageFormat.format("<html>Image downloaded from URI<br>size: w={0}, h={1}</html>",
                                              _img.getWidth(), _img.getHeight()));
@@ -311,8 +312,7 @@ private void save(File file) {
 	String suffix = file.getName().substring(file.getName().lastIndexOf('.') + 1);
 	suffix = suffix.toLowerCase();
 	JFrame frame = new JFrame();
-	if (suffix.equals("jpg") || suffix.equals("png")) {
-		
+	if (suffix.equals("png")) {
 		if (_img != null) {
 			try {
 				ImageIO.write(_img, suffix, file);
@@ -323,20 +323,20 @@ private void save(File file) {
 			JOptionPane.showMessageDialog(frame, "Failed - _img is null");
 		}
 	} else {
-		JOptionPane.showMessageDialog(frame, "Failed - file extension has to be either .jpg or .png");
+		JOptionPane.showMessageDialog(frame, "Failed - file extension has to be .png");
 	}
 }
 
 /* Sho Abe */
 private void saveAs() {
 	JFrame frame = new JFrame();
-	FileDialog chooser = new FileDialog(frame, "Use a .jpg or .png extension", FileDialog.SAVE);
+	FileDialog chooser = new FileDialog(frame, "Use a .png extension", FileDialog.SAVE);
 	chooser.setVisible(true);
 	if (chooser.getFile() != null) {
 		//JOptionPane.showMessageDialog(frame, chooser.getDirectory().toString() + File.separator.toString() + chooser.getFile().toString());
 		save(chooser.getDirectory() + File.separator + chooser.getFile());
 	} else {
-		JOptionPane.showMessageDialog(frame, "Failed - can't get the file");
+		//JOptionPane.showMessageDialog(frame, "Failed - can't get the file");
 	}
 }
 
@@ -558,6 +558,7 @@ private void initComponents() {
   			btnGetMap.addActionListener(new ActionListener() {
   				public void actionPerformed(ActionEvent e) {
   					startTaskAction();
+  					btnSaveMap.setVisible(true);
   				}
   			});
   			panel1.add(btnGetMap, new TableLayoutConstraints(5, 0, 5, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
@@ -629,6 +630,7 @@ private void initComponents() {
   			panel1.add(btnZoomOut, new TableLayoutConstraints(3, 2, 3, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- btnSaveMap ----
+  			btnSaveMap.setVisible(false);
   			btnSaveMap.setText("Save");
   			btnSaveMap.addActionListener(new ActionListener() {
   				public void actionPerformed(ActionEvent e) {
